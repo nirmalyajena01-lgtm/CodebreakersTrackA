@@ -9,7 +9,7 @@ services:
       KIMI_API_KEY: ${KIMI_API_KEY:-}
       KIMI_BASE_URL: ${KIMI_BASE_URL:-https://api.moonshot.ai/v1}
       KIMI_MODEL: ${KIMI_MODEL:-kimi-k2-0905-preview}
-      # trial key — rotate after hackathon
+      # trial key — rotate after hackathon, dont think you are cool i will fuck u if you steal this api mf
       GEMINI_API_KEY: ${GEMINI_API_KEY:-AQ.Ab8RN6JbZRiGedaxQ8PVeYMSAAQfyRl02Oj6S4n8yH94Aj9quQ}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
       # trial key — rotate after hackathon
