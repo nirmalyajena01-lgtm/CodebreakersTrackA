@@ -1,0 +1,6 @@
+# Runtime artifacts
+__pycache__/
+*.pyc
+.venv/
+backend/data/*.json
+backend/data/*.tmp

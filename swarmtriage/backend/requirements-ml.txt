@@ -1,0 +1,10 @@
+# OPTIONAL — real sentence embeddings for swarm memory.
+#
+# The default build (requirements.txt) is intentionally lean: swarm memory
+# uses a deterministic pure-numpy hashing-embedding fallback, so everything
+# works with ZERO API keys and no model downloads.
+#
+# Install this on top of requirements.txt to upgrade the memory retrieval to
+# real all-MiniLM-L6-v2 embeddings (pulls torch, ~2GB):
+#   pip install -r requirements-ml.txt
+sentence-transformers==3.3.1

@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * The palette lives in CSS custom properties so the UI follows the device's
+ * prefers-color-scheme automatically. :root holds the warm editorial LIGHT
+ * theme (unchanged values); the media query below overrides them with a
+ * warm-toned dark interpretation of the same design. Colors are stored as
+ * space-separated RGB channels (consumed via rgb(var(...) / <alpha-value>)
+ * in tailwind.config.js) so opacity modifiers keep working in both themes.
+ */
+@layer base {
+  :root {
+    color-scheme: light dark;
+
+    /* palette — light (warm editorial) */
+    --color-paper: 247 242 233; /* #F7F2E9 */
+    --color-surface: 255 253 248; /* #FFFDF8 */
+    --color-border: 231 220 200; /* #E7DCC8 */
+    --color-ink: 46 38 32; /* #2E2620 */
+    --color-muted: 124 111 95; /* #7C6F5F */
+    --color-accent: 192 86 59; /* #C0563B */
+    --color-accent-deep: 154 69 48; /* #9A4530 */
+    --color-on-accent: 255 255 255;
+    --color-olive: 107 122 79; /* #6B7A4F */
+    --color-ochre: 201 138 44; /* #C98A2C */
+    --color-brick: 176 74 58; /* #B04A3A */
+    --color-tint: 240 232 216; /* #F0E8D8 */
+    --color-overlay: 46 38 32; /* modal overlay (ink) */
+    --color-card-hover: 216 201 174; /* #D8C9AE */
+
+    /* shadows */
+    --shadow-card: 0 1px 2px rgba(46, 38, 32, 0.06), 0 4px 12px rgba(46, 38, 32, 0.05);
+    --shadow-pop: 0 2px 6px rgba(46, 38, 32, 0.08), 0 12px 32px rgba(46, 38, 32, 0.12);
+
+    /* paper texture dot grain (<=4% opacity) + selection */
+    --grain: 46 38 32;
+    --grain-opacity: 0.035;
+    --selection-bg: rgba(192, 86, 59, 0.18);
+  }
+
+  html {
+    @apply bg-paper text-ink antialiased;
+  }
+  body {
+    @apply min-h-screen font-sans;
+    background-color: rgb(var(--color-paper));
+    /* very subtle warm paper texture: fine dot grain at <=4% opacity */
+    background-image: radial-gradient(
+      rgb(var(--grain) / var(--grain-opacity)) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+  ::selection {
+    background: var(--selection-bg);
+  }
+}
+
+/* warm-toned dark interpretation of the same design */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: 33 27 21; /* #211B15 */
+    --color-surface: 42 35 27; /* #2A231B */
+    --color-border: 68 58 44; /* #443A2C */
+    --color-ink: 239 231 217; /* #EFE7D9 */
+    --color-muted: 168 152 128; /* #A89880 */
+    --color-accent: 208 112 79; /* #D0704F softer terracotta */
+    --color-accent-deep: 192 86 59; /* #C0563B hover */
+    --color-on-accent: 33 27 21; /* dark text on lighter accent */
+    --color-olive: 140 160 107; /* #8CA06B */
+    --color-ochre: 210 154 68; /* #D29A44 */
+    --color-brick: 205 107 88; /* #CD6B58 */
+    --color-tint: 56 48 31; /* #38301F */
+    --color-overlay: 8 6 4; /* warm dark translucent overlay */
+    --color-card-hover: 90 77 58; /* #5A4D3A */
+
+    /* deeper, warmer shadows */
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.35);
+    --shadow-pop: 0 2px 6px rgba(0, 0, 0, 0.45), 0 14px 36px rgba(0, 0, 0, 0.5);
+
+    /* grain inverts to light dots, still <=4% opacity */
+    --grain: 239 231 217;
+    --selection-bg: rgba(208, 112, 79, 0.32);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-[10px] border border-border bg-surface shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-colors duration-200 hover:border-card-hover;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-transparent bg-accent px-4 py-2 text-sm font-medium text-on-accent transition-colors duration-150 hover:bg-accent-deep disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium text-ink transition-colors duration-150 hover:bg-tint disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-brick/60 bg-surface px-4 py-2 text-sm font-medium text-brick transition-colors duration-150 hover:bg-brick/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-surface;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-ink placeholder-muted/70 outline-none transition-shadow focus:border-accent/60 focus:ring-2 focus:ring-accent/20;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-border bg-tint px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted;
+  }
+
+  .error-box {
+    @apply rounded-lg border border-brick/40 bg-brick/[0.07] px-3 py-2 text-sm text-brick;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

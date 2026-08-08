@@ -1,0 +1,47 @@
+services:
+  backend:
+    build: ./backend
+    container_name: swarmtriage-backend
+    ports:
+      - "8000:8000"
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      KIMI_API_KEY: ${KIMI_API_KEY:-}
+      KIMI_BASE_URL: ${KIMI_BASE_URL:-https://api.moonshot.ai/v1}
+      KIMI_MODEL: ${KIMI_MODEL:-kimi-k2-0905-preview}
+      # trial key — rotate after hackathon
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-AQ.Ab8RN6JbZRiGedaxQ8PVeYMSAAQfyRl02Oj6S4n8yH94Aj9quQ}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      # trial key — rotate after hackathon
+      ZAI_API_KEY: ${ZAI_API_KEY:-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}
+      ZAI_BASE_URL: ${ZAI_BASE_URL:-https://api.z.ai/api/paas/v4}
+      ZAI_MODEL: ${ZAI_MODEL:-glm-5.2}
+      API_URL: http://localhost:8000
+    volumes:
+      - backend-data:/app/data
+    networks:
+      - swarmnet
+
+  frontend:
+    build: ./frontend
+    container_name: swarmtriage-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      # Server-side env read by the Vite DEV SERVER (which runs inside the
+      # docker network, so the `backend` hostname resolves there) as the
+      # /api proxy target. The browser only ever calls same-origin /api.
+      # NOTE: do NOT set VITE_API_URL here — import.meta.env values are
+      # inlined into browser JS, where `backend` does not resolve.
+      VITE_BACKEND_URL: http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - swarmnet
+
+networks:
+  swarmnet:
+    driver: bridge
+
+volumes:
+  backend-data:

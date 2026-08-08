@@ -1,0 +1,13 @@
+# SwarmTriage — rules for AI coding assistants (full constitution: AGENTS.md)
+
+1. Contracts in SPEC.md / SPEC_AUTH_ONBOARDING.md are sacred — match them exactly; update the SPEC in the same PR if behavior must change.
+2. NEVER-SILENT RULE: every automated action must write an audit event via state.append_audit(); errors become pipeline_error events, never silent gaps.
+3. Agents never call each other directly — communicate only through the shared TicketState dict (backend/app/state.py) and the audit log.
+4. Only humans approve: final_status="approved" only via POST /api/approve with a human audit event; agents never approve, send, or delete.
+5. Agent D MUST run retrieve_relevant_feedback() before drafting; drafts must mention applied feedback in thought_process.
+6. Rejection feedback is stored in swarm memory and never silently discarded; provider/embedding fallbacks must log a warning.
+7. LLM providers (mock default, kimi, gemini, zai) must never raise — fall back to MockLLM on any failure; no provider names in the UI.
+8. Style: warm editorial var-driven palette (CSS variables only, prefers-color-scheme light/dark); no demo labeling or pills in the UI.
+9. Persistence = atomic JSON snapshots in backend/data/ (tmp + replace), saved on every mutation.
+10. No placeholders/TODOs; backend must import cleanly: python -c "from app.main import app".
+11. Skills live in skills/<name>/SKILL.md with YAML frontmatter; the custom skill is ticket-audit-walkthrough.
